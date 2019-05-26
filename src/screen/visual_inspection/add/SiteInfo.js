@@ -8,7 +8,6 @@ import DocumentPanel from './DocumentPanel'
 import { connect } from 'react-redux'
 import { addActivity } from '../../../model/controller/activityController'
 import Lang from '../../../localization/lang'
-import moment from 'moment'
 
 class SiteInfo extends Component {
     activity = this.props.screenProps.activity
@@ -52,11 +51,6 @@ class SiteInfo extends Component {
             { cancelable: false }
         )
     }
-
-    defaultDate() {
-        var currentDate = new Date().toLocaleDateString()
-        return moment(currentDate).format('YYYY-MM-DD')
-    }
     
     render() {
         const stringConstants = Lang[this.props.language];
@@ -66,7 +60,7 @@ class SiteInfo extends Component {
                 <ScrollView style={[styles.centerContainer, styles.regularTMargin]}>
                     <Text style={styles.keyText}>{stringConstants.date}</Text>
                     <View style={styles.iconInput}>
-                        <TextInput style={styles.dateInput} defaultValue={this.state.date ? this.state.date : this.defaultDate() } />
+                        <TextInput style={styles.dateInput} defaultValue={this.state.date} />
                         <TouchableOpacity style={{ opacity: 0.4 }} onPress={() => { this.props.navigation.navigate('DatePicker', { handleDate: this.handleDate }) }}>
                             <Image source={require('../../../../assets/png/calendar.png')} style={[styles.rightIcon, { width: 24, height: 24 }]} />
                         </TouchableOpacity>

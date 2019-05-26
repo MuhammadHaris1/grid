@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TextInput, TouchableOpacity, ScrollView, Image, Alert } from 'react-native'
 import { DocumentPicker, FileSystem } from 'expo'
-import moment from 'moment'
 
 import ShiftScrollView from '../../../../component/ShiftScrollView'
 import PrimaryRadioForm from '../../../../component/PrimaryRadioForm'
@@ -70,11 +69,6 @@ class SiteInfo extends Component {
         )  
     }
 
-    defaultDate() {
-        var currentDate = new Date().toLocaleDateString()
-        return moment(currentDate).format('YYYY-MM-DD')
-    }
-
     render() {
         return (
             <ShiftScrollView>
@@ -87,7 +81,7 @@ class SiteInfo extends Component {
 
                     <Text style={styles.keyText}>Date</Text>
                     <View style={styles.iconInput}>
-                        <TextInput style={styles.dateInput} defaultValue={this.state.date ? this.state.date : this.defaultDate() } />
+                        <TextInput style={styles.dateInput} defaultValue={this.state.date} />
                         <TouchableOpacity style={{ opacity: 0.4 }} onPress={() => this.props.navigation.navigate('DatePicker', { handleDate: this.handleDate })}>
                             <Image source={require('../../../../../assets/png/calendar.png')} style={[styles.rightIcon, { width: 24, height: 24 }]} />
                         </TouchableOpacity>
@@ -118,10 +112,10 @@ class SiteInfo extends Component {
                             multiline style={[styles.valueText, { height: 90, textAlignVertical: 'top' }]} blurOnSubmit={true} multiline />
                     </View>
 
-                    {/* <TouchableOpacity style={{ flexDirection: 'row', marginTop: 15 }} onPress={this.attachFile}>
+                    <TouchableOpacity style={{ flexDirection: 'row', marginTop: 15 }} onPress={this.attachFile}>
                         <Image source={require('../../../../../assets/png/circle_plus.png')} style={{ width: 24, height: 24 }} />
                         <Text style={styles.linkText}>Attach file</Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     {
                         this.maintenance.documents.map((file, ind) => (
                             <View key={ind} style={styles.itemContainer}>

@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 import SiteInfo from './SiteInfo'
 import TabInfo from './TabInfo'
 import DatePicker from '../../util/DatePicker'
-import AttachDocument from '../add/AttachDocument';
 
 class Navigator extends Component {
     render() {
@@ -30,8 +29,7 @@ class Navigator extends Component {
         const Tabs = createMaterialTopTabNavigator(
             {
                 'Site Info': siteInfoNavigator,
-                ...tabs,
-                'ATTACHMENT' : AttachDocument
+                ...tabs
             },
             {
                 tabBarOptions: {

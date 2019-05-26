@@ -13,8 +13,7 @@ class SiteInfo extends Component {
 
     state = {
         editing: false,
-        date: this.siteInfo.date,
-        defaultDt: ''
+        date: this.siteInfo.date
     }
 
     handleDate = (date) => this.setState({ date: date.day + '.' + date.month + '.' + date.year })
@@ -38,15 +37,9 @@ class SiteInfo extends Component {
             this.setState({ editing: !this.state.editing })
     }
 
-    defaultDate() {
-        var currentDate = new Date().toLocaleDateString()
-        return moment(currentDate).format('YYYY-MM-DD')
-        
-    }
-
     render() {
         const stringConstants  = Lang[this.props.language]
-        console.log("defaul date siteInfo siteInfo", this.state.defaultDt)
+
         let actionIcon
         if (this.state.editing)
             actionIcon = <Image source={require('../../../assets/png/save.png')} style={{ width: 25, height: 25 }} />
@@ -64,7 +57,7 @@ class SiteInfo extends Component {
 
                     <Text style={styles.keyText}>{stringConstants.date}</Text>
                     <View style={styles.iconInput}>
-                        <TextInput style={styles.dateInput} defaultValue={this.state.date ? this.state.date : this.state.defaultDt } />
+                        <TextInput style={styles.dateInput} defaultValue={this.state.date} />
                         <TouchableOpacity style={{ opacity: 0.4 }} onPress={() => this.props.navigation.navigate('DatePicker', { handleDate: this.handleDate })} disabled={!this.state.editing}>
                         <Image source={require('../../../assets/png/calendar.png')} style={[styles.rightIcon, {width: 24, height: 24}]} />
                         </TouchableOpacity>

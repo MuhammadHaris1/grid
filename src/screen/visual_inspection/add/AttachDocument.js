@@ -104,7 +104,7 @@ class AttachDocument extends Component {
 
     render() {
         const stringConstants = Lang[this.props.language];
-        // console.log('Activity ===========>', this.activity)
+
         return (
             <ShiftScrollView style={{height: Dimensions.get('window').height - 110}}>
                 <ScrollView style={[styles.centerContainer, styles.regularTMargin]}>
@@ -122,8 +122,8 @@ class AttachDocument extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    {/* {
-                         this.activity.attachments.map((document, ind) =>
+                    {
+                        this.activity.attachments.map((document, ind) =>
                             <DocumentPanel
                                 stringConstants={stringConstants}
                                 key={ind}
@@ -135,7 +135,7 @@ class AttachDocument extends Component {
                                 }}
                             />
                         )
-                    } */}
+                    }
 
                     <View style={{marginBottom: 40}}/>
                 </ScrollView>

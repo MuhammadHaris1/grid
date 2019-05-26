@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, ScrollView, Alert, Dimensions, Image } from 'react-native'
+import { TouchableOpacity, ScrollView, Alert, Dimensions, Image, AsyncStorage} from 'react-native'
 
 import AmoundInput from '../../../component/AmountInput'
 import QualityInput from '../../../component/QualityInput'
@@ -18,11 +18,48 @@ class TabInfo extends Component {
         editing: false,
     }
 
+    
+
     componentWillMount = () => {
         this.info = this.props.screenProps.answers[this.props.navigation.state.routeName]
+        // this._retriveData()
+    }
+
+    // componentDidMount = () => {
+    //     this._retriveData()
+    // }
+
+    enableEditButton = async ()=>{
+        var edit = JSON.stringify(!this.state.editing)
+        try {
+            await AsyncStorage.setItem('editKey',edit);
+            console.log('enableEditButton =>')
+          } catch (error) {
+            // Error saving data
+                        console.log('enableEditButton error =>')
+
+          }
+    }
+
+    _retriveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('editKey');
+            if (value !== null) {
+              // We have data!!
+            console.log('enableEditButton getting data =>', value)
+            var convertVal = JSON.parse(value)
+            console.log('enableButton getting data After JSON in TEABINFO =>', value)
+            this.setState({editing: convertVal})
+            }
+          } catch (error) {
+            // Error retrieving data
+            console.log('Errr getting data =>', error)
+
+          }
     }
 
     handleAction = () => {
+        this.enableEditButton()
         const stringConstants = Lang[this.props.language];
 
         if (this.state.editing) {
@@ -66,6 +103,9 @@ class TabInfo extends Component {
     }
 
     render() {
+
+        this._retriveData()
+
         let actionIcon
         if (this.state.editing)
             actionIcon = <Image source={require('../../../../assets/png/save.png')} style={{ width: 25, height: 25 }} />

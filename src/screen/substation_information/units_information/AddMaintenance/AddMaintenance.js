@@ -36,12 +36,7 @@ class AddMaintenance extends Component {
                         <View style={styles.headerTitleView}><Text style={styles.headerTextLeft}>Add maintenance</Text></View>
                     </View>
 
-                    <TabNavigator navigation={this.props.navigation} screenProps={{
-                        activity: this.props.screenProps,
-                        navigation: this.props.navigation,
-                        addActivity: this.props.addActivity,
-                        date: { date: '' }
-                    }} screenProps={this.maintenance} />
+                    <TabNavigator navigation={this.props.navigation} screenProps={this.maintenance} />
 
                 </SafeAreaView>
             </View>

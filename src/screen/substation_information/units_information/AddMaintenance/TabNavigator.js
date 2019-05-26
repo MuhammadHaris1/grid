@@ -2,13 +2,11 @@ import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigat
 
 import SiteInfo from './SiteInfo'
 import Protocol from './Protocol'
-import AttachDocument from '../../../visual_inspection/add/AttachDocument';
 
 const Tabs = createMaterialTopTabNavigator(
     {
         'Site info': SiteInfo,
-        'Protocol': Protocol,
-        'ATTACHMENT': AttachDocument
+        'Protocol': Protocol
     },
     {
         tabBarOptions: {
