@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, ScrollView, Alert, Dimensions, TextInput, Image, AsyncStorage } from 'react-native'
+import { Text, View, TouchableOpacity, ScrollView, Alert, Dimensions, TextInput, Image, Modal, CameraRoll, WebView, Linking, AsyncStorage  } from 'react-native'
 import { DocumentPicker, FileSystem } from 'expo'
 
 import ShiftView from '../../../component/ShiftScrollView'
@@ -14,7 +14,8 @@ import { DOWNLOAD_ACTIVITY_DOCUMENT_LINK } from '../../../model/constants'
 import { connect } from 'react-redux'
 import { updateActivity } from '../../../model/controller/activityController'
 import { updateMaintenance } from '../../../model/controller/maintenanceController'
-import Lang from '../../../localization/lang'
+import Lang from '../../../localization/lang';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 
 class SiteInfo extends Component {
@@ -22,7 +23,22 @@ class SiteInfo extends Component {
 
     state = {
         editing: false,
-        date: this.activity.date
+        date: this.activity.date,
+        imageUri: null,
+        pdfUri: null,
+        images: [{
+            // Simplest usage.
+            url: '',
+
+            // width: number
+            // height: number
+            // Optional, if you know the image size, you can set the optimization performance
+
+            // You can pass props to <Image />.
+            props: {
+                // headers: ...
+            }
+        }]
     }
 
     componentWillMount = () => {
@@ -61,7 +77,6 @@ class SiteInfo extends Component {
 
           }
     }
-
 
     handleDate = (date) => this.setState({ date: date.dateString })
 
@@ -108,8 +123,31 @@ class SiteInfo extends Component {
     }
 
     downloadFile = async (document) => {
+        console.log('hellllo****************************', document)
         console.log(DOWNLOAD_ACTIVITY_DOCUMENT_LINK(document.id))
+        if(document.name.includes('.pdf')){
+            Linking.openURL(DOWNLOAD_ACTIVITY_DOCUMENT_LINK(document.id))
+        }
         FileSystem.downloadAsync(DOWNLOAD_ACTIVITY_DOCUMENT_LINK(document.id), FileSystem.documentDirectory + document.name)
+            .then(({ uri }) => {
+                if (uri.includes('.pdf')) {
+                    console.log('this is pdf file', uri)
+                    // Linking.openURL(uri)
+                    this.setState({ pdfUri: uri})
+                }
+                else if (uri.includes('.jpg') || uri.includes('.png') || uri.includes('.jpeg')) {
+                    const { images } = this.state
+                    // console.log('Finished downloading to ', uri);
+                    images[0].url = uri
+                    console.log(images)
+                    this.setState({ images, imageUri: uri })
+                    console.log('this is an image', uri)
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
 
@@ -117,7 +155,6 @@ class SiteInfo extends Component {
     render() {
         const stringConstants = Lang[this.props.language];
         this._retriveSITEData()
-
         let actionIcon
         if (this.state.editing)
             actionIcon = <Image source={require('../../../../assets/png/save.png')} style={{ width: 25, height: 25 }} />
@@ -172,10 +209,15 @@ class SiteInfo extends Component {
                         )
                     }
 
-                    <TouchableOpacity style={{ flexDirection: 'row', marginTop: 15 }} disabled={!this.state.editing}>
+                    <Modal visible={!!this.state.imageUri} transparent={true}>
+                        <ImageViewer imageUrls={this.state.images} enableSwipeDown={true} onSwipeDown={() => this.setState({ imageUri: null })} saveToLocalByLongPress={true} onSave={(uro) => CameraRoll.saveToCameraRoll(uro, "photo")} />
+                    </Modal>
+
+
+                    {/* <TouchableOpacity style={{ flexDirection: 'row', marginTop: 15 }} disabled={!this.state.editing}>
                         <Image source={require('../../../../assets/png/circle_plus.png')} style={{ width: 24, height: 24 }} />
                         <Text style={styles.linkText} onPress={this.attachFile}>{stringConstants.attachADocument}</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <View style={{ marginBottom: 40 }} />
                 </ScrollView>
